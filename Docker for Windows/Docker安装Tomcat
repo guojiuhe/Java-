@@ -1,0 +1,56 @@
+可以使用Docker Destop 或 Powershell
+docker run --name redis -d -p 6379:6379 redis:5.0.3  
+docker images 查看镜像
+PS C:\Users\Administrator> docker images
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+redis        5.0.3     0f88f9be5839   3 years ago   95MB
+
+安装tomcat
+docker search tomcat
+OFFICIAL 表示官方
+安装 ： docker pull tomcat
+没选版本号，默认最新
+PS C:\Users\Administrator> docker images
+REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
+tomcat       latest    ab37a470285a   4 days ago    474MB
+redis        5.0.3     0f88f9be5839   3 years ago   95MB
+安装成功
+启动 ： docker run --name mytomcat -d -p 8081:8080 tomcat
+-d 表示后台运行，并返回后台容器，
+-p 表示端口号，8080指tomcat端口号，8081指tomcat在docker中的端口号
+停止：docker stop mytomcat
+删除：docker rm mytomcat
+启动后访问 ： http://localhost:8081/ 
+HTTP状态 404 - 未找到，说明启动成功了，配置有问题
+进入tomcat容器
+docker exec -it 9a5117e0f94264cfdfc0ca6df6804c20999166a963e5ed652feb3c3d42fdbb44 /bin/bash
+root@9a5117e0f942:/usr/local/tomcat# cd webapps
+root@9a5117e0f942:/usr/local/tomcat/webapps# ls -l
+total 0
+root@9a5117e0f942:/usr/local/tomcat/webapps# cd webapps.dist
+bash: cd: webapps.dist: No such file or directory
+root@9a5117e0f942:/usr/local/tomcat/webapps# ..
+bash: ..: command not found
+root@9a5117e0f942:/usr/local/tomcat/webapps# cd ..
+root@9a5117e0f942:/usr/local/tomcat# cd webapps.dist
+root@9a5117e0f942:/usr/local/tomcat/webapps.dist# ls -l
+total 20
+drwxr-xr-x 15 root root 4096 Nov  7 21:46 docs
+drwxr-xr-x  7 root root 4096 Nov  7 21:46 examples
+drwxr-xr-x  6 root root 4096 Nov  7 21:46 host-manager
+drwxr-xr-x  6 root root 4096 Nov  7 21:46 manager
+drwxr-xr-x  3 root root 4096 Nov  7 21:46 ROOT
+root@9a5117e0f942:/usr/local/tomcat/webapps.dist#
+root@9a5117e0f942:/usr/local/tomcat/webapps.dist# cd ..
+root@9a5117e0f942:/usr/local/tomcat#  rm -r webapps
+root@9a5117e0f942:/usr/local/tomcat# mv webapps.dist webapps
+root@9a5117e0f942:/usr/local/tomcat# exit
+exit
+简述  ：删除webapps ，webapps.dist 重命名为webapps
+
+挂载
+docker cp mytomcat:/usr/local/tomcat/conf D:/linux/root/tomcat/conf
+docker cp mytomcat:/usr/local/tomcat/logs D:/linux//root/tomcat/logs
+docker cp mytomcat:/usr/local/tomcat/webapps D:/linux//root/tomcat/webapps
+执行完命令后发现文件已经挂载到D:\Linux\root\tomcat
+再次访问http://localhost:8081/ 启动成功
