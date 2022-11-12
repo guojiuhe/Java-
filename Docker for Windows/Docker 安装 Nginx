@@ -1,1 +1,9 @@
-
+docker search nginx
+docker pull nginx 
+docker images
+docker run --name mynginx -p 8082:8001 -d nginx
+docker ps  -- 查看正在运行
+docker ps -a  -- 查看all
+docker cp mynginx:/etc/nginx/nginx.conf D:\Linux\root\nginx\conf
+docker cp mynginx:/etc/nginx/conf.d D:\Linux\root\nginx\conf
+docker cp mynginx:/usr/share/nginx/html/ D:\Linux\root\nginx
