@@ -20,5 +20,44 @@ docker run -d -p 8081:7081 -m 200m --name nginx -v D:\Linux\root\nginx\conf\ngin
 
 docker run --name nginx -p 8081:7081 -d nginx 不挂载
 docker stop nginx
-docker start nginx
-docker exec -it 3c091461c67d328fee5948223f23939a392902f90c49b6462c7d45542d001078 bash
+docker start nginx 
+进入容器bash
+docker exec -it 3c091461c67d328fee5948223f23939a392902f90c49b6462c7d45542d001078 /bin/bash
+docker exec -it nginx /bin/bash
+
+启动nginx成功，但是http://localhost:8081/无法访问
+查看ip docker inspect
+连接 curl 172.17.0.2 -- 无法连接到远程服务器
+进入容器，可以连接
+PS C:\Users\Administrator> docker exec -it nginx /bin/bash
+root@3c091461c67d:/# curl 172.17.0.2
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+root@3c091461c67d:/#
+
+容器内能访问，外部无法访问...
+最后修改如下命令可以访问：（改为80:80）
+docker run -d -p 80:80 -m 200m --name nginx -v D:\Linux\root\nginx\conf\nginx.conf:/etc/nginx/nginx.conf -v D:\Linux\root\nginx\logs:/var/log/nginx -v D:\Linux\root\nginx\html:/usr/share/nginx/html -v D:\Linux\root\nginx\conf\conf.d:/etc/nginx/conf.d nginx
+
+
