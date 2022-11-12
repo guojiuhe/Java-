@@ -17,7 +17,7 @@ redis        5.0.3     0f88f9be5839   3 years ago   95MB
 安装成功
 启动 ： docker run --name mytomcat -d -p 8081:8080 tomcat
 -d 表示后台运行，并返回后台容器，
--p 表示端口号，8080指tomcat端口号，8081指tomcat在docker中的端口号
+-p 表示端口号，8081指tomcat端口号，8080指tomcat在docker中的端口号
 停止：docker stop mytomcat
 删除：docker rm mytomcat
 启动后访问 ： http://localhost:8081/ 
