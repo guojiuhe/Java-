@@ -47,10 +47,14 @@ root@9a5117e0f942:/usr/local/tomcat# mv webapps.dist webapps
 root@9a5117e0f942:/usr/local/tomcat# exit
 exit
 简述  ：删除webapps ，webapps.dist 重命名为webapps
+访问http://localhost:8081/ 启动成功
 
 挂载
 docker cp mytomcat:/usr/local/tomcat/conf D:/linux/root/tomcat/conf
 docker cp mytomcat:/usr/local/tomcat/logs D:/linux//root/tomcat/logs
 docker cp mytomcat:/usr/local/tomcat/webapps D:/linux//root/tomcat/webapps
 执行完命令后发现文件已经挂载到D:\Linux\root\tomcat
-再次访问http://localhost:8081/ 启动成功
+
+docker run -d -p 8081:8080 --name tomcat-test -v D:/linux//root/tomcat/webapps:/usr/local/tomcat/webapps -v D:/linux/root/tomcat/conf:/usr/local/tomcat/conf -v D:/linux//root/tomcat/logs:/usr/local/tomcat/logs tomcat
+
+访问http://localhost:8081/ 启动成功
