@@ -22,7 +22,7 @@ Failed to start
 --- 引发异常的上一位置中堆栈跟踪的末尾 ---
    在 System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
    在 Docker.ApiServices.StateMachines.StartTransition.<DoRunAsync>d__5.MoveNext() 位置 C:\workspaces\PR-19568\src\github.com\docker\pinata\win\src\Docker.ApiServices\StateMachines\StartTransition.cs:行号 92
-网上查到需要安装WSL插件，我没有安装，重启docker就没有问题了
+网上查到需要安装WSL插件，我没有安装，重启docker就没有问题了--经确认，不需要安装插件，重启即可
 
 docker镜像默认在C盘（C:\Program Files\Docker），修改为D盘
 wsl --shutdown
