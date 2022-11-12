@@ -7,3 +7,18 @@ docker ps -a  -- 查看all
 docker cp mynginx:/etc/nginx/nginx.conf D:\Linux\root\nginx\conf
 docker cp mynginx:/etc/nginx/conf.d D:\Linux\root\nginx\conf
 docker cp mynginx:/usr/share/nginx/html/ D:\Linux\root\nginx
+docker stop mynginx
+docker rm mynginx
+docker rm mytomcat
+docker rm tomca-test
+
+docker run -d -p 8081:7081 -m 200m --name nginx -v D:\Linux\root\nginx\conf\nginx.conf:/etc/nginx/nginx.conf -v D:\Linux\root\nginx\logs:/var/log/nginx -v D:\Linux\root\nginx\html:/usr/share/nginx/html -v D:\Linux\root\nginx\conf\conf.d:/etc/nginx/conf.d nginx
+-m 200m：设置容器使用内存最大值
+-v : 挂载目录到容器中
+-d : 以守护进程的方式运行一个容器
+-p 8081:7081：将容器的7081端口映射到主机的8081端口，需要访问8081
+
+docker run --name nginx -p 8081:7081 -d nginx 不挂载
+docker stop nginx
+docker start nginx
+docker exec -it 3c091461c67d328fee5948223f23939a392902f90c49b6462c7d45542d001078 bash
