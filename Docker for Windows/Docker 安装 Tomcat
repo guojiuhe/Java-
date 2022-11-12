@@ -55,6 +55,6 @@ docker cp mytomcat:/usr/local/tomcat/logs D:/linux//root/tomcat/logs
 docker cp mytomcat:/usr/local/tomcat/webapps D:/linux//root/tomcat/webapps
 执行完命令后发现文件已经挂载到D:\Linux\root\tomcat
 
-docker run -d -p 8081:8080 --name tomcat-test -v D:/linux//root/tomcat/webapps:/usr/local/tomcat/webapps -v D:/linux/root/tomcat/conf:/usr/local/tomcat/conf -v D:/linux//root/tomcat/logs:/usr/local/tomcat/logs tomcat
+docker run -d -p 8081:8080 --name tomcat -v D:/linux//root/tomcat/webapps:/usr/local/tomcat/webapps -v D:/linux/root/tomcat/conf:/usr/local/tomcat/conf -v D:/linux//root/tomcat/logs:/usr/local/tomcat/logs tomcat
 
 访问http://localhost:8081/ 启动成功
