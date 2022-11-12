@@ -63,5 +63,13 @@ docker run -d -p 80:80 -m 200m --name nginx -v D:\Linux\root\nginx\conf\nginx.co
 docker run -d -p 8088:80 -m 200m --name nginx -v D:\Linux\root\nginx\conf\nginx.conf:/etc/nginx/nginx.conf -v D:\Linux\root\nginx\logs:/var/log/nginx -v D:\Linux\root\nginx\html:/usr/share/nginx/html -v D:\Linux\root\nginx\conf\conf.d:/etc/nginx/conf.d nginx
 8088:8081 不可以访问
 docker run -d -p 8088:8081 -m 200m --name nginx -v D:\Linux\root\nginx\conf\nginx.conf:/etc/nginx/nginx.conf -v D:\Linux\root\nginx\logs:/var/log/nginx -v D:\Linux\root\nginx\html:/usr/share/nginx/html -v D:\Linux\root\nginx\conf\conf.d:/etc/nginx/conf.d nginx
+8088:8080 也可以访问
+docker run -d -p 8088:8080 -m 200m --name nginx -v D:\Linux\root\nginx\conf\nginx.conf:/etc/nginx/nginx.conf -v D:\Linux\root\nginx\logs:/var/log/nginx -v D:\Linux\root\nginx\html:/usr/share/nginx/html -v D:\Linux\root\nginx\conf\conf.d:/etc/nginx/conf.d nginx
+经测试, 80和8080端口可用
+同时启动tomcat和nginx,同时映射8080端口（8080:8080,8088:8080）都可以正常访问，说明端口可共用。因为每个docker都有1个80端口
+docker run --name redis -p 8089:8080 -d redis 
+启动redis后 访问 8088和8089都是nginx
+
+docker run -p 6379:6379 --name redis -v D:\Linux\root\redis\redis.conf:/etc/redis/redis.conf -v D:\Linux\root\redis\data:/data -d redis redis-server /etc/redis/redis.conf 
 
 
