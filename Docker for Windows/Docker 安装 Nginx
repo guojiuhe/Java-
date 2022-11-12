@@ -30,7 +30,7 @@ docker exec -it nginx /bin/bash
 连接 curl 172.17.0.2 -- 无法连接到远程服务器
 进入容器，可以连接
 PS C:\Users\Administrator> docker exec -it nginx /bin/bash
-root@3c091461c67d:/# curl 172.17.0.2
+root@3c091461c67d:/# curl 172.17.0.2 -- 这里指定端口7081就连接不上了
 <!DOCTYPE html>
 <html>
 <head>
@@ -63,10 +63,8 @@ docker run -d -p 80:80 -m 200m --name nginx -v D:\Linux\root\nginx\conf\nginx.co
 docker run -d -p 8088:80 -m 200m --name nginx -v D:\Linux\root\nginx\conf\nginx.conf:/etc/nginx/nginx.conf -v D:\Linux\root\nginx\logs:/var/log/nginx -v D:\Linux\root\nginx\html:/usr/share/nginx/html -v D:\Linux\root\nginx\conf\conf.d:/etc/nginx/conf.d nginx
 8088:8081 不可以访问
 docker run -d -p 8088:8081 -m 200m --name nginx -v D:\Linux\root\nginx\conf\nginx.conf:/etc/nginx/nginx.conf -v D:\Linux\root\nginx\logs:/var/log/nginx -v D:\Linux\root\nginx\html:/usr/share/nginx/html -v D:\Linux\root\nginx\conf\conf.d:/etc/nginx/conf.d nginx
-8088:8080 也可以访问
-docker run -d -p 8088:8080 -m 200m --name nginx -v D:\Linux\root\nginx\conf\nginx.conf:/etc/nginx/nginx.conf -v D:\Linux\root\nginx\logs:/var/log/nginx -v D:\Linux\root\nginx\html:/usr/share/nginx/html -v D:\Linux\root\nginx\conf\conf.d:/etc/nginx/conf.d nginx
-经测试, 80和8080端口可用
-同时启动tomcat和nginx,同时映射8080端口（8080:8080,8088:8080）都可以正常访问，说明端口可共用。因为每个docker都有1个80端口
+
+经测试, 只有80端口可用
 
 
 docker run -p 6379:6379 --name redis -v D:\Linux\root\redis\redis.conf:/etc/redis/redis.conf -v D:\Linux\root\redis\data:/data -d redis redis-server /etc/redis/redis.conf 
@@ -80,16 +78,10 @@ auth "123456" or auth 123456
 docker exec -it redis bash  /  docker exec -it redis /bin/bash
 # 或直接使用redis-cli访问容器内redis
 
-
-PS C:\Users\Administrator> docker ps
-CONTAINER ID   IMAGE     COMMAND                  CREATED             STATUS             PORTS                            NAMES
-f545e7016944   nginx     "/docker-entrypoint.…"   37 minutes ago      Up 37 minutes      80/tcp, 0.0.0.0:8088->8080/tcp   nginx
-337fd66a7da8   tomcat    "catalina.sh run"        About an hour ago   Up About an hour   0.0.0.0:8081->8080/tcp           tomcat
-访问http://localhost/ 和 http://localhost:8088/ 都是nginx. 即80/tcp, 0.0.0.0:8088->8080/tcp
+同样经测试 tomcat只有8080端口可用
 
 为什么只能映射80和8080？
-docker run -d -p 8088:8087 -m 200m --name nginx -v D:\Linux\root\nginx\conf\nginx.conf:/etc/nginx/nginx.conf -v D:\Linux\root\nginx\logs:/var/log/nginx -v D:\Linux\root\nginx\html:/usr/share/nginx/html -v D:\Linux\root\nginx\conf\conf.d:/etc/nginx/conf.d nginx
-现在可以访问了，为什么？  65行命令也可以访问了：8088:8081
+
 
 docker inspect tomcat 查看容器ip : 172.17.0.3
 docker run -d -p 8082:8080 --name tomcat -v D:/linux//root/tomcat/webapps:/usr/local/tomcat/webapps -v D:/linux/root/tomcat/conf:/usr/local/tomcat/conf -v D:/linux//root/tomcat/logs:/usr/local/tomcat/logs tomcat
@@ -100,19 +92,23 @@ docker run -d -p 8082:8081 --name tomcat -v D:/linux//root/tomcat/webapps:/usr/l
 进入容器 curl 172.17.0.2:8081 不可访问
 docker run -d -p 8082:80 --name tomcat -v D:/linux//root/tomcat/webapps:/usr/local/tomcat/webapps -v D:/linux/root/tomcat/conf:/usr/local/tomcat/conf -v D:/linux//root/tomcat/logs:/usr/local/tomcat/logs tomcat
 不可访问
-进入容器 curl 172.17.0.2:80 不可访问
+进入容器 curl 172.17.0.2:80 不可访问 -- 没做测试，其实这里用curl 172.17.0.2:8080就可以访问了 -- 已验证，可以访问
 
 docker inspect nginx 查看容器ip : 172.17.0.3
 docker run -d -p 8088:8087 -m 200m --name nginx -v D:\Linux\root\nginx\conf\nginx.conf:/etc/nginx/nginx.conf -v D:\Linux\root\nginx\logs:/var/log/nginx -v D:\Linux\root\nginx\html:/usr/share/nginx/html -v D:\Linux\root\nginx\conf\conf.d:/etc/nginx/conf.d nginx
-可以访问，但是刷新就不可访问
+不可访问
 进入容器 curl 172.17.0.2:8087 不可访问
 进入容器 curl 172.17.0.2:80 可以访问
 docker run -d -p 8087:80 -m 200m --name nginx -v D:\Linux\root\nginx\conf\nginx.conf:/etc/nginx/nginx.conf -v D:\Linux\root\nginx\logs:/var/log/nginx -v D:\Linux\root\nginx\html:/usr/share/nginx/html -v D:\Linux\root\nginx\conf\conf.d:/etc/nginx/conf.d nginx
-可以访问，刷新之后也可以
+可以访问
 进入容器 curl 172.17.0.3 可以访问
 
 经测试 nginx需要映射容器端口80，tomcat需要映射容器端口8080
-但是为什么呢
+
+因为nginx默认端口80，tomcat默认端口8080
+docker外部端口可以任意映射，内部端口必须匹配 -- 原来这么简单。。
+
+
 
 
 
