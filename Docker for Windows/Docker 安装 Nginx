@@ -59,5 +59,9 @@ root@3c091461c67d:/#
 容器内能访问，外部无法访问...
 最后修改如下命令可以访问：（改为80:80）
 docker run -d -p 80:80 -m 200m --name nginx -v D:\Linux\root\nginx\conf\nginx.conf:/etc/nginx/nginx.conf -v D:\Linux\root\nginx\logs:/var/log/nginx -v D:\Linux\root\nginx\html:/usr/share/nginx/html -v D:\Linux\root\nginx\conf\conf.d:/etc/nginx/conf.d nginx
+8088:80 也可以访问
+docker run -d -p 8088:80 -m 200m --name nginx -v D:\Linux\root\nginx\conf\nginx.conf:/etc/nginx/nginx.conf -v D:\Linux\root\nginx\logs:/var/log/nginx -v D:\Linux\root\nginx\html:/usr/share/nginx/html -v D:\Linux\root\nginx\conf\conf.d:/etc/nginx/conf.d nginx
+8088:8081 不可以访问
+docker run -d -p 8088:8081 -m 200m --name nginx -v D:\Linux\root\nginx\conf\nginx.conf:/etc/nginx/nginx.conf -v D:\Linux\root\nginx\logs:/var/log/nginx -v D:\Linux\root\nginx\html:/usr/share/nginx/html -v D:\Linux\root\nginx\conf\conf.d:/etc/nginx/conf.d nginx
 
 
