@@ -67,9 +67,31 @@ docker run -d -p 8088:8081 -m 200m --name nginx -v D:\Linux\root\nginx\conf\ngin
 docker run -d -p 8088:8080 -m 200m --name nginx -v D:\Linux\root\nginx\conf\nginx.conf:/etc/nginx/nginx.conf -v D:\Linux\root\nginx\logs:/var/log/nginx -v D:\Linux\root\nginx\html:/usr/share/nginx/html -v D:\Linux\root\nginx\conf\conf.d:/etc/nginx/conf.d nginx
 经测试, 80和8080端口可用
 同时启动tomcat和nginx,同时映射8080端口（8080:8080,8088:8080）都可以正常访问，说明端口可共用。因为每个docker都有1个80端口
-docker run --name redis -p 8089:8080 -d redis 
-启动redis后 访问 8088和8089都是nginx
+
 
 docker run -p 6379:6379 --name redis -v D:\Linux\root\redis\redis.conf:/etc/redis/redis.conf -v D:\Linux\root\redis\data:/data -d redis redis-server /etc/redis/redis.conf 
+docker exec -it redis redis-cli  -- 连接redis
+set 命令提示：(error) NOAUTH Authentication required.
+需要密码
+auth "123456" or auth 123456
+或者直接 docker exec -it redis redis-cli -a 123456
+
+进入容器内部，通用命令
+docker exec -it redis bash  /  docker exec -it redis /bin/bash
+# 或直接使用redis-cli访问容器内redis
+
+
+PS C:\Users\Administrator> docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED             STATUS             PORTS                            NAMES
+f545e7016944   nginx     "/docker-entrypoint.…"   37 minutes ago      Up 37 minutes      80/tcp, 0.0.0.0:8088->8080/tcp   nginx
+337fd66a7da8   tomcat    "catalina.sh run"        About an hour ago   Up About an hour   0.0.0.0:8081->8080/tcp           tomcat
+访问http://localhost/ 和 http://localhost:8088/ 都是nginx. 即80/tcp, 0.0.0.0:8088->8080/tcp
+
+为什么只能映射80和8080？
+docker run -d -p 8088:8087 -m 200m --name nginx -v D:\Linux\root\nginx\conf\nginx.conf:/etc/nginx/nginx.conf -v D:\Linux\root\nginx\logs:/var/log/nginx -v D:\Linux\root\nginx\html:/usr/share/nginx/html -v D:\Linux\root\nginx\conf\conf.d:/etc/nginx/conf.d nginx
+现在可以访问了，为什么？  65行命令也可以访问了：8088:8081
+7077:7077 不可访问
+8077:8077 不可访问
+8088:8077 可以访问
 
 
